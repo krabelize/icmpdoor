@@ -15,4 +15,4 @@ def icmpshell(pkt):
             newpkt = (pkt[Raw].load).decode('utf-8', errors='ignore').replace('\n','')
             print(newpkt)
 
-sniff(iface="ens33", prn=icmpshell, filter="icmp", store="0")
+sniff(iface="eth0", prn=icmpshell, filter="icmp", store="0")
