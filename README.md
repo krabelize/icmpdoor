@@ -6,7 +6,7 @@ Usage:
 icmp-cnc.py [-h] -i INTERFACE -d DESTINATION_IP (Command and Control)
 ./icmpdoor.py [-h] -i INTERFACE -d DESTINATION_IP (Implant)
 ```
-optional arguments:
+Arguments:
 
 ```bash
   -h, --help            show this help message and exit
