@@ -1,7 +1,5 @@
 # ICMP Reverse Shell
-ICMP reverse shell written in Python3 and scapy. Tested on Ubuntu 20.04, Debian 10 (Kali Linux), and Windows 10.
-
-More info: https://cryptsus.com/blog/icmp-reverse-shell.html
+ICMP reverse shell written in Python3 and scapy. Tested on Ubuntu 20.04, Debian 10 (Kali Linux), and Windows 10. Read [this article](https://cryptsus.com/blog/icmp-reverse-shell.html) for more information.
 
 Python version (both Windows and Linux):
 ```bash
