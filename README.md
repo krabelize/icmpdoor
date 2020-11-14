@@ -22,8 +22,8 @@ Parameters details:
                         Destination IP address
   ```
 # Screenshots
-![screen1](https://cryptsus.com/blog/icmp-reverse-shell-linux.jpg 269)
-![screen2](https://cryptsus.com/blog/icmp-reverse-shell-windows.jpg 269)
+![screen1](https://cryptsus.com/blog/icmp-reverse-shell-linux.jpg)
+![screen2](https://cryptsus.com/blog/icmp-reverse-shell-windows.jpg)
 
 # License
 Berkeley Software Distribution (BSD)
