@@ -1,5 +1,5 @@
-# ICMP Reverse Shell in Python 3 
-ICMP reverse shell with py3 scapy
+# ICMP Reverse Shell
+ICMP reverse shell written in Python3 and scapy
 
 Usage:
 ```bash
