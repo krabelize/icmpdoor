@@ -21,6 +21,10 @@ Parameters details:
   -d DESTINATION_IP, --destination_ip DESTINATION_IP
                         Destination IP address
   ```
+# Screenshots
+![screen1](https://cryptsus.com/blog/icmp-reverse-shell-linux.jpg 269)
+![screen2](https://cryptsus.com/blog/icmp-reverse-shell-windows.jpg 269)
+
 # License
 Berkeley Software Distribution (BSD)
 
