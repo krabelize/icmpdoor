@@ -15,3 +15,8 @@ Arguments:
   -d DESTINATION_IP, --destination_ip DESTINATION_IP
                         Destination IP address
   ```
+# License
+Berkeley Software Distribution (BSD)
+
+# Author
+[Jeroen van Kessel](https://twitter.com/jeroenvkessel) | [cryptsus.com](https://cryptsus.com) - we craft cyber security solutions
