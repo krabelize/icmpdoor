@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #By krabelize | cryptsus.com
 #ICMPdoor (reverse shell) C&C 
 from scapy.all import *
