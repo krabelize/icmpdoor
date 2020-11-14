@@ -15,7 +15,7 @@ Widows binary version:
 ./icmpdoor.exe -d DESTINATION_IP (Implant)
 ```
 
-Arguments:
+Parameters details:
 ```bash
   -h, --help            show this help message and exit
   -i INTERFACE, --interface INTERFACE
