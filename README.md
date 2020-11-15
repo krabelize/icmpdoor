@@ -32,7 +32,7 @@ Read [this article](https://cryptsus.com/blog/icmp-reverse-shell.html) for more 
 # Screenshots
 Screenshot 1 and 2 shows how icmpdoor works on Ubuntu 20.04, Debian 10 (Kali Linux) and Windows 10. ClamAV is active on Ubuntu 20.04:
 ![screen1](https://cryptsus.com/blog/icmp-reverse-shell-linux.jpg)
-Microsoft Defender Advanced Threat Protection is active on the Windows 10 Enterprise machine:
+Microsoft Defender Advanced Threat Protection (ATP) is active on the Windows 10 Enterprise machine:
 ![screen2](https://cryptsus.com/blog/icmp-reverse-shell-windows.jpg)
 
 # License
