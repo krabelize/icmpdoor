@@ -8,7 +8,7 @@ import argparse
 
 #Variables
 icmp_id = int(13170)
-ttl = int(64)
+TTL = int(64)
 
 def check_scapy():
     try:
@@ -44,7 +44,7 @@ def main():
         elif icmpshell == '':
             pass
         else:
-            payload = (IP(dst=args.destination_ip, ttl=ttl)/ICMP(type=8,id=icmp_id)/Raw(load=icmpshell))
+            payload = (IP(dst=args.destination_ip, ttl=TTL)/ICMP(type=8,id=icmp_id)/Raw(load=icmpshell))
             sr(payload, timeout=0, verbose=0)
     sniffing.join()
 
