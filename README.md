@@ -28,6 +28,7 @@ Read [this article](https://cryptsus.com/blog/icmp-reverse-shell.html) for more 
                         Listener (virtual) Network Interface (e.g. eth0)
   -d DESTINATION_IP, --destination_ip DESTINATION_IP
                         Destination IP address
+  exit                  Exit Command and Control (E2)
   ```
 # Screenshots
 Screenshot 1 and 2 shows how icmpdoor works on Ubuntu 20.04, Debian 10 (Kali Linux) and Windows 10. ClamAV is active on Ubuntu 20.04:
