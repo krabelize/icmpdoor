@@ -1,7 +1,7 @@
 # icmpdoor - ICMP Reverse Shell
 icmpdoor is written in Python3 and scapy. Tested on Ubuntu 20.04, Debian 10 (Kali Linux), and Windows 10. 
 
-Read [this article](https://cryptsus.com/blog/icmp-reverse-shell.html) for more information.
+[Read this article for more information.](https://cryptsus.com/blog/icmp-reverse-shell.html)
 
 **Python version usage (both Windows and Linux):**
 ```bash
