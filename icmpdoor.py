@@ -3,7 +3,7 @@
 #By krabelize | cryptsus.com
 #More info: https://cryptsus.com/blog/icmp-reverse-shell.html
 from scapy.all import sr,IP,ICMP,Raw,sniff
-from os import popen
+import os
 import argparse
 
 #Variables
