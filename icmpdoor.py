@@ -3,8 +3,8 @@
 #By krabelize | cryptsus.com
 #More info: https://cryptsus.com/blog/icmp-reverse-shell.html
 from scapy.all import sr,IP,ICMP,Raw,sniff
-import os
 import argparse
+import os
 
 #Variables
 ICMP_ID = int(13170)
