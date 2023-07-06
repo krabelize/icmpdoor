@@ -36,6 +36,9 @@ Screenshot 1 and 2 shows how icmpdoor works on Ubuntu 20.04, Debian 10 (Kali Lin
 Microsoft Defender Advanced Threat Protection (ATP) is active on the Windows 10 Enterprise machine:
 ![screen2](https://cryptsus.com/blog/icmp-reverse-shell-windows.jpg)
 
+# Beta
+stryngs created a beta to combine both scripts into one. This way Classes are created, which are fundamental for enabling encryption.
+
 # License
 Berkeley Software Distribution (BSD)
 
