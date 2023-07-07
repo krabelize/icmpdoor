@@ -9,3 +9,6 @@
 - Run ```python3 ./otp.py``` from the target machine
 - Run ```python3 ./otp.py -m server``` from the Command and Control host
 - When finished run ```___otp___``` in the shell from the Command and Control host
+
+# to-do
+- Merge icmpdoor.py with icmpdoorRaw.py to make a unified concept
