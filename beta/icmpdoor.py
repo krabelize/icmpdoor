@@ -95,7 +95,7 @@ class Icmpdoor():
                          length = 32,
                          salt = salt,
                          iterations = 480000)
-        return base64.urlsafe_b64encode(kdf.derive(password.encode()))
+        return f"""'{base64.urlsafe_b64encode(kdf.derive(password.encode())).decode()}'"""
 
     def serverShell(self):
         """Show the output from the client"""
